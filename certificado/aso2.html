@@ -140,7 +140,6 @@
             justify-content: center;
             align-items: center;
             background: #fff;
-            border: 1px dashed #999;
         }
         .signature-img {
             max-width: 100%;
@@ -944,50 +943,82 @@
         }
 
         // Função para salvar o conteúdo do formulário em PDF em 1 página
-        function savePDF() {
-            const element = document.getElementById('aso-form');
-            if (!element) {
-                console.error("Elemento #aso-form não encontrado!");
-                return;
-            }
-            // Cria um clone para manipulação sem afetar o layout original
-            const clonedElement = element.cloneNode(true);
-            clonedElement.style.fontSize = "8px";
-            clonedElement.style.padding = "5mm";
-            clonedElement.style.boxSizing = "border-box";
-            clonedElement.style.overflow = "hidden";
-            clonedElement.style.width = "210mm";
-            clonedElement.style.maxWidth = "210mm";
+// Função corrigida para salvar o conteúdo do formulário em PDF em 1 página
+function savePDF() {
+    const element = document.getElementById('aso-form');
+    if (!element) {
+        console.error("Elemento #aso-form não encontrado!");
+        return;
+    }
 
-            // Adiciona o clone ao corpo (fora da visualização)
-            document.body.appendChild(clonedElement);
+    // Cria um clone para manipulação sem afetar o layout original
+    const clonedElement = element.cloneNode(true);
+    
+    // Remove os elementos que têm classe no-print
+    const noPrintElements = clonedElement.querySelectorAll('.no-print');
+    noPrintElements.forEach(elem => elem.remove());
+    
+    // Adiciona estilos semelhantes aos da mídia de impressão
+    clonedElement.style.padding = "0";
+    clonedElement.style.margin = "0";
+    clonedElement.style.border = "none";
+    clonedElement.style.width = "210mm";
+    clonedElement.style.maxWidth = "210mm";
+    clonedElement.style.fontSize = "9pt";
+    
+    // Aplica estilos específicos nos elementos internos
+    const infoBoxes = clonedElement.querySelectorAll('.info-box, .section-box');
+    infoBoxes.forEach(box => {
+        box.style.padding = "3px";
+        box.style.marginBottom = "5px";
+        box.style.pageBreakInside = "avoid";
+    });
+    
+    // Ajusta o tamanho do contêiner para caber na página A4
+    const container = clonedElement;
+    container.style.height = "297mm";
+    container.style.maxHeight = "297mm";
+    container.style.overflow = "hidden";
+    container.style.boxSizing = "border-box";
+    
+    // Adiciona o clone ao body, mas com posição absoluta e fora da visualização
+    clonedElement.style.position = "absolute";
+    clonedElement.style.left = "-9999px";
+    document.body.appendChild(clonedElement);
 
-            const opt = {
-                margin: 0,
-                filename: 'aso.pdf',
-                image: { type: 'png', quality: 1.0 },
-                html2canvas: { 
-                    scale: 3,
-                    useCORS: true,
-                    logging: false,
-                    width: 793,  // Largura A4 em pixels
-                    height: 1120 // Altura A4 em pixels
-                },
-                jsPDF: { 
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                },
-                pagebreak: { mode: 'avoid-all' }
-            };
+    // Configurações otimizadas para html2pdf
+    const opt = {
+        margin: [0, 0, 0, 0],  // [top, right, bottom, left] em mm
+        filename: 'aso.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { 
+            scale: 2,  // Redução da escala para melhorar o desempenho
+            useCORS: true,
+            logging: false,
+            width: 210 * 3.78,  // Conversão mm para px (estimativa mais precisa)
+            height: 297 * 3.78  // A4 é 210mm x 297mm
+        },
+        jsPDF: { 
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait'
+        },
+        pagebreak: { mode: 'avoid-all' }
+    };
 
-            html2pdf().set(opt).from(clonedElement).save().then(function() {
-                document.body.removeChild(clonedElement);
-            }).catch(function(err) {
-                console.error('Erro ao gerar PDF:', err);
-                document.body.removeChild(clonedElement);
-            });
-        }
+    // Gerar o PDF e remover o clone depois
+    html2pdf()
+        .set(opt)
+        .from(clonedElement)
+        .save()
+        .then(function() {
+            document.body.removeChild(clonedElement);
+        })
+        .catch(function(err) {
+            console.error('Erro ao gerar PDF:', err);
+            document.body.removeChild(clonedElement);
+        });
+}
         
         // Função para criar um novo documento (simula F5 recarregando a página)
         function novoDocumento() {
