@@ -132,14 +132,14 @@
             flex-direction: column;
             justify-content: flex-end;
         }
-        /* Na área de assinatura do funcionário, mantemos apenas o container vazio (com borda) e o <img> para exibir a assinatura, se disponível */
+        /* Na área de assinatura do funcionário, removemos input e placeholder; ficará apenas a área com fundo branco e a imagem */
         .signature-area {
             height: 30px;
             margin-bottom: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #fff; /* fundo branco */
+            background: #fff;
         }
         .signature-img {
             max-width: 100%;
@@ -199,8 +199,8 @@
         button:hover {
             background-color: #45a049;
         }
-        /* Botão extra de upload (em azul) */
-        #uploadSignatureButton {
+        /* Botões extras em azul */
+        #uploadSignatureButton, #novoDocumentoButton {
             background-color: blue;
             color: white;
         }
@@ -293,8 +293,10 @@
             <button onclick="window.print();">Imprimir Documento</button>
             <!-- Botão para salvar em PDF -->
             <button id="pdfButton">Salvar como PDF</button>
-            <!-- Novo botão para adicionar a assinatura do funcionário -->
+            <!-- Botão para adicionar assinatura do funcionário -->
             <button id="uploadSignatureButton">Adicionar Assinatura do Funcionário</button>
+            <!-- Botão para limpar/zerar os campos (Novo Documento) -->
+            <button id="novoDocumentoButton">Novo Documento</button>
             <!-- Novo input para upload da assinatura (oculto) -->
             <input type="file" id="employee-signature-input2" class="file-input" accept="image/*">
         </div>
@@ -327,12 +329,10 @@
             <div class="fixed-text" style="font-size: 9pt; margin-bottom: 5px;">
                 ATESTO PARA CUMPRIMENTO DO QUE DETERMINA A NORMA REGULAMENTADORA N° 7 DA PORTARIA 6.734 DE 09 DE MARÇO DE 2020, QUE O (A)
             </div>
-
             <div class="form-group">
                 <span class="form-label">SR.(A):</span>
                 <input id="nome-funcionario" type="text" class="form-field" placeholder="Nome completo do funcionário">
             </div>
-
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-group">
@@ -347,7 +347,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-group">
@@ -362,12 +361,10 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group">
                 <span class="form-label">EMPRESA:</span>
                 <input id="empresa" type="text" class="form-field" placeholder="CNPJ - NOME DA EMPRESA">
             </div>
-
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-group">
@@ -382,7 +379,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-column">
                     <div class="form-group">
@@ -397,7 +393,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group">
                 <span class="form-label">FOI SUBMETIDO À EXAME CLÍNICO EM</span>
                 <input id="data-exame" type="text" class="form-field" style="width: 100px;" placeholder="DD/MM/AAAA">
@@ -614,11 +609,10 @@
                 <div class="signature-line">
                     <div class="signature-field">
                         <!-- Campo de assinatura do funcionário:
-                             Agora, esse campo não dispara o upload (fica em branco) e só será preenchido
-                             quando o usuário usar o botão "Adicionar Assinatura do Funcionário" lá em cima.
+                             Agora fica apenas o container vazio e a <img> que receberá a assinatura,
+                             caso o usuário use o botão "Adicionar Assinatura do Funcionário".
                         -->
                         <div class="signature-area" id="employee-signature-area">
-                            <!-- Apenas a imagem, inicialmente vazia -->
                             <img id="employee-signature-img" class="signature-img" alt="Assinatura do Funcionário">
                         </div>
                         <div class="signature-line-bottom">
@@ -649,9 +643,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Removemos o evento de clique no "employee-signature-area" (campo de assinatura do funcionário)
-            // pois agora o upload será disparado pelo novo botão.
-            
             // Preencher datas automaticamente
             fillCurrentDates();
             
@@ -666,12 +657,18 @@
             const pdfBtn = document.getElementById('pdfButton');
             if (pdfBtn) pdfBtn.addEventListener('click', savePDF);
 
-            // Novo botão para adicionar assinatura do funcionário (em azul)
+            // Botão para adicionar assinatura do funcionário (em azul)
             const uploadSigBtn = document.getElementById('uploadSignatureButton');
             if (uploadSigBtn) {
                 uploadSigBtn.addEventListener('click', function() {
                     document.getElementById('employee-signature-input2').click();
                 });
+            }
+
+            // Botão para criar um novo documento (em azul)
+            const novoDocBtn = document.getElementById('novoDocumentoButton');
+            if (novoDocBtn) {
+                novoDocBtn.addEventListener('click', novoDocumento);
             }
 
             // Evento para processar o arquivo da assinatura (novo input)
@@ -697,7 +694,7 @@
             }
         }
         
-        // Preenche datas com a data atual
+        // Preenche as datas com a data atual
         function fillCurrentDates() {
             const now = new Date();
             const day = String(now.getDate()).padStart(2, '0');
@@ -938,7 +935,7 @@
                 }
             }
         }
-
+        
         // Função para salvar o conteúdo do formulário em PDF em 1 página
         function savePDF() {
             const element = document.getElementById('aso-form');
@@ -947,10 +944,8 @@
                 return;
             }
             
-            // Cria um clone do elemento para manipulação sem interferir no layout original
+            // Cria um clone para manipulação sem afetar o layout original
             const clonedElement = element.cloneNode(true);
-            
-            // (Opcional) Reduz o tamanho para tentar forçar 1 página – ajuste conforme necessidade
             clonedElement.style.fontSize = "8px";
             clonedElement.style.padding = "5mm";
             clonedElement.style.boxSizing = "border-box";
@@ -958,7 +953,7 @@
             clonedElement.style.width = "210mm";
             clonedElement.style.maxWidth = "210mm";
 
-            // Adiciona o clone ao corpo, fora da visualização
+            // Adiciona o clone ao corpo (fora da visualização)
             document.body.appendChild(clonedElement);
 
             const opt = {
@@ -981,12 +976,27 @@
             };
 
             html2pdf().set(opt).from(clonedElement).save().then(function() {
-                // Remove o clone após a geração do PDF
                 document.body.removeChild(clonedElement);
             }).catch(function(err) {
                 console.error('Erro ao gerar PDF:', err);
                 document.body.removeChild(clonedElement);
             });
+        }
+
+        // Função para criar um novo documento (zerar todos os campos)
+        function novoDocumento() {
+            // Limpa os inputs de texto
+            document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+            // Limpa radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            // Limpa textareas
+            document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+            // Limpa campos contenteditable
+            document.querySelectorAll('[contenteditable="true"]').forEach(el => el.innerText = '');
+            const empSigImg = document.getElementById('employee-signature-img');
+            if (empSigImg) { empSigImg.src = ''; empSigImg.style.display = 'none'; }
+            // Opcional: se desejar resetar para datas atuais, chame fillCurrentDates()
+            fillCurrentDates();
         }
     </script>
 </body>
