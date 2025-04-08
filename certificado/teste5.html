@@ -132,6 +132,7 @@
             flex-direction: column;
             justify-content: flex-end;
         }
+        /* Na área de assinatura do funcionário, mantemos apenas o container vazio (com borda) e o <img> para exibir a assinatura, se disponível */
         .signature-area {
             height: 30px;
             margin-bottom: 5px;
@@ -139,7 +140,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
+            background: #fff; /* fundo branco */
         }
         .signature-img {
             max-width: 100%;
@@ -198,6 +199,11 @@
         }
         button:hover {
             background-color: #45a049;
+        }
+        /* Botão extra de upload (em azul) */
+        #uploadSignatureButton {
+            background-color: blue;
+            color: white;
         }
         .file-input {
             display: none;
@@ -288,6 +294,10 @@
             <button onclick="window.print();">Imprimir Documento</button>
             <!-- Botão para salvar em PDF -->
             <button id="pdfButton">Salvar como PDF</button>
+            <!-- Novo botão para adicionar a assinatura do funcionário -->
+            <button id="uploadSignatureButton">Adicionar Assinatura do Funcionário</button>
+            <!-- Novo input para upload da assinatura (oculto) -->
+            <input type="file" id="employee-signature-input2" class="file-input" accept="image/*">
         </div>
     </div>
 
@@ -303,7 +313,7 @@
                 <p id="contato-clinica" contenteditable="true">Tel: (11) 91964-9772 - www.licomedicinadotrabalho.com</p>
             </div>
             <div class="qr-space">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://www.gov.br"  alt="QR Code" style="display: block;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://www.gov.br" alt="QR Code" style="display: block;">
             </div>
         </div>
 
@@ -434,34 +444,74 @@
             <h3>EXAMES COMPLEMENTARES</h3>
             <table class="exams-table">
                 <tr>
-                    <td style="width: 20%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="width: 30%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Espirometria"></td>
-                    <td style="width: 20%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="width: 30%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Acuidade Visual"></td>
+                    <td style="width: 20%; border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="width: 30%; border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Espirometria">
+                    </td>
+                    <td style="width: 20%; border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="width: 30%; border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Acuidade Visual">
+                    </td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Eletrocardiograma"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Audiometria Ocupacional"></td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Eletrocardiograma">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Audiometria Ocupacional">
+                    </td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Avaliação Psicossocial"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Eletroencefalograma"></td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Avaliação Psicossocial">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Eletroencefalograma">
+                    </td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Raio X do Tórax (PA)"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Glicemia Jejum"></td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Raio X do Tórax (PA)">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Glicemia Jejum">
+                    </td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Hemograma completo"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
-                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Avaliação Clínica Ocupacional"></td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Hemograma completo">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 95%; border: none;" value="Avaliação Clínica Ocupacional">
+                    </td>
                 </tr>
             </table>
 
@@ -472,27 +522,75 @@
             <table style="width: 100%; border-collapse: collapse; font-size: 9pt;">
                 <tr>
                     <td style="width: 40%; padding: 2px;">Trabalho em Altura:</td>
-                    <td style="width: 20%; padding: 2px;"><label class="checkbox-label"><input type="radio" name="altura" value="apto" id="altura-apto"> APTO</label></td>
-                    <td style="width: 20%; padding: 2px;"><label class="checkbox-label"><input type="radio" name="altura" value="inapto" id="altura-inapto"> INAPTO</label></td>
-                    <td style="width: 20%; padding: 2px;"><label class="checkbox-label"><input type="radio" name="altura" value="na" id="altura-na"> N/A</label></td>
+                    <td style="width: 20%; padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="altura" value="apto" id="altura-apto"> APTO
+                        </label>
+                    </td>
+                    <td style="width: 20%; padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="altura" value="inapto" id="altura-inapto"> INAPTO
+                        </label>
+                    </td>
+                    <td style="width: 20%; padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="altura" value="na" id="altura-na"> N/A
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding: 2px;">Trabalho em Espaço Confinado:</td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="confinado" value="apto" id="confinado-apto"> APTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="confinado" value="inapto" id="confinado-inapto"> INAPTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="confinado" value="na" id="confinado-na"> N/A</label></td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="confinado" value="apto" id="confinado-apto"> APTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="confinado" value="inapto" id="confinado-inapto"> INAPTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="confinado" value="na" id="confinado-na"> N/A
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding: 2px;">Trabalho com Eletricidade:</td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="eletricidade" value="apto" id="eletricidade-apto"> APTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="eletricidade" value="inapto" id="eletricidade-inapto"> INAPTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="eletricidade" value="na" id="eletricidade-na"> N/A</label></td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="eletricidade" value="apto" id="eletricidade-apto"> APTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="eletricidade" value="inapto" id="eletricidade-inapto"> INAPTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="eletricidade" value="na" id="eletricidade-na"> N/A
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding: 2px;">Trabalho para Operações com Empilhadeiras:</td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="empilhadeiras" value="apto" id="empilhadeiras-apto"> APTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="empilhadeiras" value="inapto" id="empilhadeiras-inapto"> INAPTO</label></td>
-                    <td style="padding: 2px;"><label class="checkbox-label"><input type="radio" name="empilhadeiras" value="na" id="empilhadeiras-na"> N/A</label></td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="empilhadeiras" value="apto" id="empilhadeiras-apto"> APTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="empilhadeiras" value="inapto" id="empilhadeiras-inapto"> INAPTO
+                        </label>
+                    </td>
+                    <td style="padding: 2px;">
+                        <label class="checkbox-label">
+                            <input type="radio" name="empilhadeiras" value="na" id="empilhadeiras-na"> N/A
+                        </label>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -516,10 +614,13 @@
             <div class="signature-section">
                 <div class="signature-line">
                     <div class="signature-field">
+                        <!-- Campo de assinatura do funcionário:
+                             Agora, esse campo não dispara o upload (fica em branco) e só será preenchido
+                             quando o usuário usar o botão "Adicionar Assinatura do Funcionário" lá em cima.
+                        -->
                         <div class="signature-area" id="employee-signature-area">
-                            <input type="file" id="employee-signature-input" class="file-input" accept="image/*">
+                            <!-- Apenas a imagem, inicialmente vazia -->
                             <img id="employee-signature-img" class="signature-img" alt="Assinatura do Funcionário">
-                            <span id="employee-signature-placeholder" class="signature-placeholder">Clique para adicionar assinatura</span>
                         </div>
                         <div class="signature-line-bottom">
                             <div id="nome-funcionario-assinatura" contenteditable="true">FUNCIONÁRIO</div>
@@ -549,14 +650,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Configurar upload para assinatura do funcionário
-            document.getElementById('employee-signature-area').addEventListener('click', function() {
-                document.getElementById('employee-signature-input').click();
-            });
-            
-            document.getElementById('employee-signature-input').addEventListener('change', function(event) {
-                loadEmployeeSignature(event);
-            });
+            // Removemos o evento de clique no "employee-signature-area" (campo de assinatura do funcionário)
+            // pois agora o upload será disparado pelo novo botão.
             
             // Preencher datas automaticamente
             fillCurrentDates();
@@ -571,10 +666,24 @@
             // Botão para salvar em PDF
             const pdfBtn = document.getElementById('pdfButton');
             if (pdfBtn) pdfBtn.addEventListener('click', savePDF);
+
+            // Novo botão para adicionar assinatura do funcionário (em azul)
+            const uploadSigBtn = document.getElementById('uploadSignatureButton');
+            if (uploadSigBtn) {
+                uploadSigBtn.addEventListener('click', function() {
+                    document.getElementById('employee-signature-input2').click();
+                });
+            }
+
+            // Evento para processar o arquivo da assinatura (novo input)
+            const empSigInput2 = document.getElementById('employee-signature-input2');
+            if (empSigInput2) {
+                empSigInput2.addEventListener('change', loadEmployeeSignature2);
+            }
         });
         
-        // Função para carregar a assinatura do funcionário
-        function loadEmployeeSignature(event) {
+        // Função para carregar a assinatura do funcionário a partir do novo input
+        function loadEmployeeSignature2(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -583,17 +692,13 @@
                     if (signatureImg) {
                         signatureImg.src = e.target.result;
                         signatureImg.style.display = 'block';
-                        const placeholder = document.getElementById('employee-signature-placeholder');
-                        if (placeholder) {
-                            placeholder.style.display = 'none';
-                        }
                     }
                 };
                 reader.readAsDataURL(file);
             }
         }
         
-        // Preencher datas com a data atual
+        // Preenche datas com a data atual
         function fillCurrentDates() {
             const now = new Date();
             const day = String(now.getDate()).padStart(2, '0');
@@ -610,7 +715,7 @@
             });
         }
         
-        // Função para salvar dados do formulário em JSON
+        // Função para salvar os dados do formulário em JSON
         function saveFormData() {
             try {
                 const formData = collectFormData();
@@ -633,7 +738,7 @@
             }
         }
         
-        // Coleta de dados do formulário
+        // Função para coletar os dados do formulário
         function collectFormData() {
             const formData = {};
             function getValue(id, property = 'value') {
@@ -824,10 +929,6 @@
                 if (signatureImg) {
                     signatureImg.src = formData.assinaturaFuncionario;
                     signatureImg.style.display = 'block';
-                    const placeholder = document.getElementById('employee-signature-placeholder');
-                    if (placeholder) {
-                        placeholder.style.display = 'none';
-                    }
                 }
             }
             if (formData.assinaturaMedico && formData.assinaturaMedico.startsWith('data:')) {
@@ -840,120 +941,54 @@
         }
 
         // Função para salvar o conteúdo do formulário em PDF em 1 página
-function savePDF() {
-    const element = document.getElementById('aso-form');
-    if (!element) {
-        console.error("Elemento #aso-form não encontrado!");
-        return;
-    }
+        function savePDF() {
+            const element = document.getElementById('aso-form');
+            if (!element) {
+                console.error("Elemento #aso-form não encontrado!");
+                return;
+            }
+            
+            // Cria um clone do elemento para manipulação sem interferir no layout original
+            const clonedElement = element.cloneNode(true);
+            
+            // (Opcional) Reduz o tamanho para tentar forçar 1 página – ajuste conforme necessidade
+            clonedElement.style.fontSize = "8px";
+            clonedElement.style.padding = "5mm";
+            clonedElement.style.boxSizing = "border-box";
+            clonedElement.style.overflow = "hidden";
+            clonedElement.style.width = "210mm";
+            clonedElement.style.maxWidth = "210mm";
 
-    // Cria um clone do elemento para manipulação
-    const clonedElement = element.cloneNode(true);
-    
-    // Função para reduzir recursivamente
-    function reduceElementSize(el, reductionFactor = 0.9) {
-        // Modifica estilos de fontes
-        const styles = [
-            'h1', 'h2', 'h3', 
-            '.form-label', 
-            '.form-field', 
-            'input', 
-            'textarea', 
-            'table', 
-            'td', 
-            'p', 
-            'span'
-        ];
+            // Adiciona o clone ao corpo, fora da visualização
+            document.body.appendChild(clonedElement);
 
-        styles.forEach(selector => {
-            const elements = el.querySelectorAll(selector);
-            elements.forEach(element => {
-                const currentSize = window.getComputedStyle(element).fontSize;
-                const numericSize = parseFloat(currentSize);
-                element.style.fontSize = `${numericSize * reductionFactor}px`;
+            const opt = {
+                margin: 0,
+                filename: 'aso.pdf',
+                image: { type: 'png', quality: 1.0 },
+                html2canvas: { 
+                    scale: 3,
+                    useCORS: true,
+                    logging: false,
+                    width: 793,  // Largura A4 em pixels
+                    height: 1120 // Altura A4 em pixels
+                },
+                jsPDF: { 
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: 'avoid-all' }
+            };
+
+            html2pdf().set(opt).from(clonedElement).save().then(function() {
+                // Remove o clone após a geração do PDF
+                document.body.removeChild(clonedElement);
+            }).catch(function(err) {
+                console.error('Erro ao gerar PDF:', err);
+                document.body.removeChild(clonedElement);
             });
-        });
-
-        // Reduz margens e paddings
-        el.style.padding = '3mm';
-        
-        const infoBoxes = el.querySelectorAll('.info-box, .section-box');
-        infoBoxes.forEach(box => {
-            box.style.marginBottom = '10px';
-            box.style.padding = '5px';
-        });
-
-        // Ajusta altura de elementos específicos
-        const signatureAreas = el.querySelectorAll('.signature-area');
-        signatureAreas.forEach(area => {
-            area.style.height = '25px';
-        });
-
-        // Reduz altura de tabelas
-        const tables = el.querySelectorAll('table');
-        tables.forEach(table => {
-            table.style.fontSize = '7pt';
-            const cells = table.querySelectorAll('td');
-            cells.forEach(cell => {
-                cell.style.padding = '2px';
-            });
-        });
-    }
-
-    // Aplica redução de tamanho
-    reduceElementSize(clonedElement);
-
-    // Garante dimensões A4
-    clonedElement.style.cssText = `
-        width: 210mm !important;
-        max-width: 210mm !important;
-        min-width: 210mm !important;
-        margin: 0 !important;
-        padding: 5mm !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-        position: relative !important;
-    `;
-
-    // Adiciona o clone ao corpo (necessário para html2canvas)
-    document.body.appendChild(clonedElement);
-
-    const opt = {
-        margin: 0,
-        filename: 'aso.pdf',
-        image: { 
-            type: 'png',
-            quality: 1.0 
-        },
-        html2canvas: { 
-            scale: 3,
-            useCORS: true,
-            logging: false,
-            width: 793,  // Largura A4 em pixels
-            height: 1120 // Altura A4 em pixels
-        },
-        jsPDF: { 
-            unit: 'mm',
-            format: 'a4',
-            orientation: 'portrait'
-        },
-        pagebreak: { mode: 'avoid-all' }
-    };
-
-    html2pdf()
-        .set(opt)
-        .from(clonedElement)
-        .save()
-        .then(() => {
-            // Remove o clone após a geração do PDF
-            document.body.removeChild(clonedElement);
-        })
-        .catch(error => {
-            console.error('Erro ao gerar PDF:', error);
-            // Remove o clone em caso de erro
-            document.body.removeChild(clonedElement);
-        });
-}
+        }
     </script>
 </body>
 </html>
