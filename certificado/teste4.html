@@ -915,16 +915,52 @@
         // Função para salvar o conteúdo do formulário em PDF
 function savePDF() {
     const element = document.getElementById('aso-form');
+    if (!element) {
+        console.error("Elemento #aso-form não encontrado");
+        return;
+    }
+
+    // 1) Dimensões aproximadas do A4 em px (relação 96 dpi)
+    //    A4 ~ 210 mm x 297 mm, que em px ~ 794 px x 1123 px
+    const pdfWidthPx  = 794;
+    const pdfHeightPx = 1123;
+    
+    // 2) Obter o tamanho real do conteúdo em px
+    //    scrollWidth/scrollHeight refletem a área real ocupada pelo elemento
+    const contentWidth  = element.scrollWidth;
+    const contentHeight = element.scrollHeight;
+    
+    // 3) Calcular o fator de escala necessário p/ encaixar TUDO numa página A4
+    //    Pegamos o menor fator entre a largura e a altura
+    let scaleW = pdfWidthPx  / contentWidth;
+    let scaleH = pdfHeightPx / contentHeight;
+    let finalScale = Math.min(scaleW, scaleH);
+    
+    // Se você deseja que ele nunca aumente (apenas diminua se ficar maior):
+    // finalScale = Math.min(finalScale, 1);
+
+    // 4) Configurar as opções do html2pdf
     const opt = {
-        margin: 0.1, // margem menor (em polegadas) para aproveitar melhor a área da página
+        margin: 0,
         filename: 'aso.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1 }, // reduzir o scale se necessário; valores maiores podem aumentar a altura
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all'] } // tenta evitar quebras de página automáticas
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: {
+            scale: finalScale,  // <- aqui forçamos o "zoom" do canvas
+        },
+        jsPDF: {
+            unit: 'px',
+            // format recebe um array [largura, altura] em px
+            format: [pdfWidthPx, pdfHeightPx],
+            orientation: 'portrait'
+        },
+        pagebreak: {
+            mode: []  // remove quebras automáticas
+        }
     };
+    
     html2pdf().set(opt).from(element).save();
 }
+
 
     </script>
 </body>
