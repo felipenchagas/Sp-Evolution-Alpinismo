@@ -942,81 +942,110 @@
             }
         }
 
-        // Função para salvar o conteúdo do formulário em PDF em 1 página
-// Função corrigida para salvar o conteúdo do formulário em PDF em 1 página
+// Função melhorada para salvar o conteúdo em PDF com uma única página A4
 function savePDF() {
+    // Seleciona o formulário
     const element = document.getElementById('aso-form');
     if (!element) {
         console.error("Elemento #aso-form não encontrado!");
         return;
     }
-
-    // Cria um clone para manipulação sem afetar o layout original
-    const clonedElement = element.cloneNode(true);
     
-    // Remove os elementos que têm classe no-print
-    const noPrintElements = clonedElement.querySelectorAll('.no-print');
-    noPrintElements.forEach(elem => elem.remove());
-    
-    // Adiciona estilos semelhantes aos da mídia de impressão
-    clonedElement.style.padding = "0";
-    clonedElement.style.margin = "0";
-    clonedElement.style.border = "none";
-    clonedElement.style.width = "210mm";
-    clonedElement.style.maxWidth = "210mm";
-    clonedElement.style.fontSize = "9pt";
-    
-    // Aplica estilos específicos nos elementos internos
-    const infoBoxes = clonedElement.querySelectorAll('.info-box, .section-box');
-    infoBoxes.forEach(box => {
-        box.style.padding = "3px";
-        box.style.marginBottom = "5px";
-        box.style.pageBreakInside = "avoid";
-    });
-    
-    // Ajusta o tamanho do contêiner para caber na página A4
-    const container = clonedElement;
-    container.style.height = "297mm";
-    container.style.maxHeight = "297mm";
-    container.style.overflow = "hidden";
-    container.style.boxSizing = "border-box";
-    
-    // Adiciona o clone ao body, mas com posição absoluta e fora da visualização
-    clonedElement.style.position = "absolute";
-    clonedElement.style.left = "-9999px";
-    document.body.appendChild(clonedElement);
-
-    // Configurações otimizadas para html2pdf
+    // Configura para aplicar os estilos de impressão
     const opt = {
-        margin: [0, 0, 0, 0],  // [top, right, bottom, left] em mm
+        margin: [5, 5, 5, 5], // pequenas margens em mm [topo, direita, baixo, esquerda]
         filename: 'aso.pdf',
-        image: { type: 'jpeg', quality: 1.0 },
+        image: { type: 'jpeg', quality: 0.98 }, // JPEG para melhor compressão
         html2canvas: { 
-            scale: 2,  // Redução da escala para melhorar o desempenho
+            scale: 2, // escala moderada, equilibrando qualidade e performance
             useCORS: true,
             logging: false,
-            width: 210 * 3.78,  // Conversão mm para px (estimativa mais precisa)
-            height: 297 * 3.78  // A4 é 210mm x 297mm
+            // Remova as propriedades de largura/altura para permitir o cálculo automático
         },
         jsPDF: { 
             unit: 'mm',
             format: 'a4',
-            orientation: 'portrait'
+            orientation: 'portrait',
+            compress: true
         },
-        pagebreak: { mode: 'avoid-all' }
+        // Esta configuração força tudo em uma única página
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
-    // Gerar o PDF e remover o clone depois
+    // Use esta abordagem para aplicar os estilos de impressão
+    const originalDisplayStyle = element.style.display;
+    element.style.display = 'block';
+    
+    // Adiciona estilos temporários via classe
+    const tempClass = 'preparing-pdf-print';
+    element.classList.add(tempClass);
+    
+    // Cria um estilo temporário para simular ambiente de impressão
+    const tempStyle = document.createElement('style');
+    tempStyle.textContent = `
+        .${tempClass} {
+            width: 210mm !important;
+            max-width: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
+            font-size: 9pt !important;
+        }
+        .${tempClass} .info-box, 
+        .${tempClass} .section-box {
+            padding: 3px !important;
+            margin-bottom: 5px !important;
+            page-break-inside: avoid !important;
+        }
+        .${tempClass} .title-container h1 {
+            font-size: 11pt !important;
+        }
+        .${tempClass} .title-container h2 {
+            font-size: 10pt !important;
+            margin: 1px 0 !important;
+        }
+        .${tempClass} textarea {
+            height: 20px !important;
+        }
+        .${tempClass} .form-group {
+            margin-bottom: 2px !important;
+        }
+    `;
+    document.head.appendChild(tempStyle);
+    
+    // Garante que os elementos não-imprimíveis estão escondidos
+    const noPrintElements = document.querySelectorAll('.no-print');
+    const noPrintStates = Array.from(noPrintElements).map(el => el.style.display);
+    noPrintElements.forEach(el => el.style.display = 'none');
+
+    // Gera o PDF
     html2pdf()
         .set(opt)
-        .from(clonedElement)
+        .from(element)
         .save()
-        .then(function() {
-            document.body.removeChild(clonedElement);
+        .then(() => {
+            // Restaura o elemento ao estado original
+            element.style.display = originalDisplayStyle;
+            element.classList.remove(tempClass);
+            document.head.removeChild(tempStyle);
+            
+            // Restaura a visibilidade dos elementos não-imprimíveis
+            noPrintElements.forEach((el, index) => {
+                el.style.display = noPrintStates[index];
+            });
         })
-        .catch(function(err) {
+        .catch(err => {
             console.error('Erro ao gerar PDF:', err);
-            document.body.removeChild(clonedElement);
+            // Restaura o elemento mesmo em caso de erro
+            element.style.display = originalDisplayStyle;
+            element.classList.remove(tempClass);
+            document.head.removeChild(tempStyle);
+            
+            // Restaura a visibilidade dos elementos não-imprimíveis
+            noPrintElements.forEach((el, index) => {
+                el.style.display = noPrintStates[index];
+            });
         });
 }
         
