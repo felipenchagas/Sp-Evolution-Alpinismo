@@ -143,7 +143,7 @@
         }
         .signature-img {
             max-width: 100%;
-            max-height: 30px;
+            max-height: 130px;
             display: none;
         }
         .signature-line-bottom {
@@ -913,18 +913,19 @@
         }
 
         // Função para salvar o conteúdo do formulário em PDF
-        function savePDF() {
-            const element = document.getElementById('aso-form');
-            // Opções para o PDF, ajustando para formato A4
-            const opt = {
-                margin:       0.5,
-                filename:     'aso.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
+function savePDF() {
+    const element = document.getElementById('aso-form');
+    const opt = {
+        margin: 0.1, // margem menor (em polegadas) para aproveitar melhor a área da página
+        filename: 'aso.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1 }, // reduzir o scale se necessário; valores maiores podem aumentar a altura
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all'] } // tenta evitar quebras de página automáticas
+    };
+    html2pdf().set(opt).from(element).save();
+}
+
     </script>
 </body>
 </html>
