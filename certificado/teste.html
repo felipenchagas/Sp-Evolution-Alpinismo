@@ -889,6 +889,15 @@ function savePDF() {
             area.style.height = '25px';
         });
 
+        // Trata a assinatura do funcionário
+        const employeeSignatureImg = el.querySelector('#employee-signature-img');
+        const employeeSignaturePlaceholder = el.querySelector('#employee-signature-placeholder');
+        if (employeeSignatureImg && employeeSignatureImg.style.display === 'none') {
+            // Se a imagem não estiver visível, limpa o elemento
+            employeeSignatureImg.src = '';
+            employeeSignaturePlaceholder.textContent = 'Sem assinatura';
+        }
+
         // Reduz altura de tabelas
         const tables = el.querySelectorAll('table');
         tables.forEach(table => {
