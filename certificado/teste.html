@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>ASO - Completo com PDF</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,14 +52,14 @@
             font-weight: bold;
         }
         .qr-space {
- 
             border: 1px dashed #999;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 12px;
         }
-        .info-box, .section-box {
+        .info-box,
+        .section-box {
             border: 1px solid #000;
             padding: 10px;
             margin-bottom: 20px;
@@ -142,6 +143,7 @@
         }
         .signature-img {
             max-width: 100%;
+            max-height: 30px;
             display: none;
         }
         .signature-line-bottom {
@@ -223,7 +225,9 @@
                 box-sizing: border-box;
                 overflow: hidden;
             }
-            input, textarea, select {
+            input,
+            textarea,
+            select {
                 border: none;
                 font-size: 9pt;
                 padding: 1px;
@@ -242,7 +246,8 @@
             .signature-line-bottom {
                 font-size: 8pt;
             }
-            .section-box, .info-box {
+            .section-box,
+            .info-box {
                 padding: 3px;
                 margin-bottom: 5px;
             }
@@ -267,11 +272,15 @@
                 height: 20px;
             }
             /* Forçar quebra de página a não ocorrer dentro das caixas */
-            .info-box, .section-box {
+            .info-box,
+            .section-box {
                 page-break-inside: avoid;
             }
         }
     </style>
+
+    <!-- Inclusão da biblioteca html2pdf.js para permitir exportar em PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="no-print">
@@ -287,6 +296,8 @@
             <button id="loadButton">Carregar Dados</button>
             <input type="file" id="loadFile" class="file-input">
             <button onclick="window.print();">Imprimir Documento</button>
+            <!-- Botão para salvar em PDF -->
+            <button id="pdfButton">Salvar como PDF</button>
         </div>
     </div>
 
@@ -559,6 +570,17 @@
             
             // Preencher datas automaticamente
             fillCurrentDates();
+            
+            // Botões existentes (caso queira ativar "Salvar Dados" e "Carregar Dados")
+            const saveBtn = document.getElementById('saveButton');
+            if (saveBtn) saveBtn.addEventListener('click', saveFormData);
+
+            const loadBtn = document.getElementById('loadButton');
+            if (loadBtn) document.getElementById('loadFile').addEventListener('change', loadFormData);
+
+            // Botão para salvar em PDF
+            const pdfBtn = document.getElementById('pdfButton');
+            if (pdfBtn) pdfBtn.addEventListener('click', savePDF);
         });
         
         // Função para carregar a assinatura do funcionário
@@ -672,8 +694,9 @@
             formData.riscos = getValue('riscos');
             formData.recomendacoes = getValue('recomendacoes');
             
-            // Exames complementares
+            // Exames complementares (apenas exemplificados; ajuste conforme quantidade)
             formData.exames = [];
+            // Se você planeja usar IDs "exame-data-1" ... "exame-data-6" e "exame-nome-1" ... "exame-nome-6", adapte aqui:
             for (let i = 1; i <= 6; i++) {
                 formData.exames.push({
                     data: getValue(`exame-data-${i}`),
@@ -729,6 +752,7 @@
                 formData.assinaturaFuncionario = employeeSignature.src;
             }
             
+            // Exemplo de outro campo de assinatura, se quiser capturar
             const doctorSignature = document.getElementById('doctor-signature-img');
             if (doctorSignature && doctorSignature.src && doctorSignature.style.display !== 'none') {
                 formData.assinaturaMedico = doctorSignature.src;
@@ -830,19 +854,16 @@
                 inapto: formData.alturaInapto,
                 na: formData.alturaNa
             });
-            
             setRadioStatus('confinado', {
                 apto: formData.confinadoApto,
                 inapto: formData.confinadoInapto,
                 na: formData.confinadoNa
             });
-            
             setRadioStatus('eletricidade', {
                 apto: formData.eletricidadeApto,
                 inapto: formData.eletricidadeInapto,
                 na: formData.eletricidadeNa
             });
-            
             setRadioStatus('empilhadeiras', {
                 apto: formData.empilhadeirasApto,
                 inapto: formData.empilhadeirasInapto,
@@ -863,7 +884,6 @@
                 if (logoImg) {
                     logoImg.src = formData.logoClinica;
                     logoImg.style.display = 'block';
-                    
                     const placeholder = document.getElementById('logo-placeholder');
                     if (placeholder) {
                         placeholder.style.display = 'none';
@@ -876,7 +896,6 @@
                 if (signatureImg) {
                     signatureImg.src = formData.assinaturaFuncionario;
                     signatureImg.style.display = 'block';
-                    
                     const placeholder = document.getElementById('employee-signature-placeholder');
                     if (placeholder) {
                         placeholder.style.display = 'none';
@@ -889,13 +908,22 @@
                 if (signatureImg) {
                     signatureImg.src = formData.assinaturaMedico;
                     signatureImg.style.display = 'block';
-                    
-                    const placeholder = document.getElementById('doctor-signature-placeholder');
-                    if (placeholder) {
-                        placeholder.style.display = 'none';
-                    }
                 }
             }
+        }
+
+        // Função para salvar o conteúdo do formulário em PDF
+        function savePDF() {
+            const element = document.getElementById('aso-form');
+            // Opções para o PDF, ajustando para formato A4
+            const opt = {
+                margin:       0.5,
+                filename:     'aso.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
