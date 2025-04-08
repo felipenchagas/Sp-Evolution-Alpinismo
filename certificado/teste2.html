@@ -840,66 +840,96 @@
         }
 
         // Função para salvar o conteúdo do formulário em PDF em 1 página
-// Função para salvar o conteúdo do formulário em PDF em 1 página
 function savePDF() {
     const element = document.getElementById('aso-form');
     if (!element) {
         console.error("Elemento #aso-form não encontrado!");
         return;
     }
+
+    // Cria um clone do elemento para manipulação
+    const clonedElement = element.cloneNode(true);
     
+    // Aplica estilos de impressão temporários
+    clonedElement.style.cssText = `
+        width: 210mm !important;
+        max-width: 210mm !important;
+        min-width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        position: relative !important;
+    `;
+
+    // Reduz tamanho de fontes para garantir que tudo caiba
+    const styleReductionRules = `
+        <style>
+            body * {
+                font-size: 8pt !important;
+                line-height: 1.1 !important;
+            }
+            .container {
+                font-size: 8pt !important;
+            }
+            h1 { font-size: 10pt !important; }
+            h2 { font-size: 9pt !important; }
+            h3 { font-size: 8pt !important; }
+            input, textarea {
+                padding: 1px !important;
+                margin: 0 !important;
+            }
+            .info-box, .section-box {
+                margin-bottom: 5px !important;
+                padding: 3px !important;
+            }
+        </style>
+    `;
+
+    // Insere as regras de estilo no clone
+    const styleTag = document.createElement('div');
+    styleTag.innerHTML = styleReductionRules;
+    clonedElement.prepend(styleTag.firstChild);
+
+    // Adiciona o clone ao corpo (necessário para html2canvas)
+    document.body.appendChild(clonedElement);
+
     const opt = {
-        margin: [5, 5, 5, 5],  // Margens reduzidas (topo, direita, baixo, esquerda)
+        margin: 0,
         filename: 'aso.pdf',
         image: { 
-            type: 'png',  
-            quality: 1.0  
+            type: 'png',
+            quality: 1.0 
         },
         html2canvas: { 
-            scale: 3,     
-            useCORS: true, 
+            scale: 3,
+            useCORS: true,
             logging: false,
-            scrollX: 0,
-            scrollY: -window.scrollY // Garantir que capture do topo
+            width: 793,  // Largura A4 em pixels
+            height: 1120 // Altura A4 em pixels
         },
         jsPDF: { 
-            unit: 'mm',   
-            format: 'a4', 
-            orientation: 'portrait' 
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait'
         },
-        pagebreak: { 
-            mode: 'avoid-all'  // Modo mais agressivo para evitar quebras
-        }
-    };
-    
-    // Ajustes para garantir uma página única
-    const originalStyles = {
-        overflow: element.style.overflow,
-        height: element.style.height,
-        maxHeight: element.style.maxHeight
+        pagebreak: { mode: 'avoid-all' }
     };
 
-    // Forçar dimensões para caber em uma página
-    element.style.overflow = 'hidden';
-    element.style.height = 'auto';
-    element.style.maxHeight = '297mm';  // Altura exata de uma página A4
-    
     html2pdf()
         .set(opt)
-        .from(element)
+        .from(clonedElement)
         .save()
         .then(() => {
-            // Restaura os estilos originais
-            element.style.overflow = originalStyles.overflow;
-            element.style.height = originalStyles.height;
-            element.style.maxHeight = originalStyles.maxHeight;
+            // Remove o clone após a geração do PDF
+            document.body.removeChild(clonedElement);
         })
-        .catch(function(err) {
-            console.error('Erro ao gerar PDF:', err);
-            // Restaura os estilos originais em caso de erro
-            element.style.overflow = originalStyles.overflow;
-            element.style.height = originalStyles.height;
-            element.style.maxHeight = originalStyles.maxHeight;
+        .catch(error => {
+            console.error('Erro ao gerar PDF:', error);
+            // Remove o clone em caso de erro
+            document.body.removeChild(clonedElement);
         });
 }
     </script>
