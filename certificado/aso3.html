@@ -295,9 +295,9 @@
             <button onclick="window.print();">Imprimir Documento</button>
             <!-- Botão para salvar em PDF -->
             <button id="pdfButton">Salvar como PDF</button>
-            <!-- Botão para adicionar assinatura do funcionário (em azul) -->
+            <!-- Botão para adicionar assinatura do funcionário -->
             <button id="uploadSignatureButton">Adicionar Assinatura do Funcionário</button>
-            <!-- Botão para criar um novo documento (em azul) -->
+            <!-- Botão para criar um novo documento (simula F5) -->
             <button id="novoDocumentoButton">Novo Documento</button>
             <!-- Input oculto para upload da assinatura -->
             <input type="file" id="employee-signature-input2" class="file-input" accept="image/*">
@@ -610,7 +610,7 @@
             <div class="signature-section">
                 <div class="signature-line">
                     <div class="signature-field">
-                        <!-- Campo de assinatura do funcionário: permanece vazio até o upload via botão -->
+                        <!-- Campo de assinatura do funcionário: fica apenas o container com fundo branco e a <img> -->
                         <div class="signature-area" id="employee-signature-area">
                             <img id="employee-signature-img" class="signature-img" alt="Assinatura do Funcionário">
                         </div>
@@ -644,18 +644,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Atualiza as datas automaticamente
             fillCurrentDates();
-
-            // Botões para "Salvar Dados" e "Carregar Dados"
+            
+            // Botão para salvar dados
             const saveBtn = document.getElementById('saveButton');
             if (saveBtn) saveBtn.addEventListener('click', saveFormData);
-
+            
+            // Botão para carregar dados: ao clicar, dispara o input oculto
             const loadBtn = document.getElementById('loadButton');
-            if (loadBtn) document.getElementById('loadFile').addEventListener('change', loadFormData);
-
+            if (loadBtn) {
+                loadBtn.addEventListener('click', function() {
+                    document.getElementById('loadFile').click();
+                });
+                document.getElementById('loadFile').addEventListener('change', loadFormData);
+            }
+            
             // Botão para salvar em PDF
             const pdfBtn = document.getElementById('pdfButton');
             if (pdfBtn) pdfBtn.addEventListener('click', savePDF);
-
+            
             // Botão para adicionar assinatura do funcionário (em azul)
             const uploadSigBtn = document.getElementById('uploadSignatureButton');
             if (uploadSigBtn) {
@@ -663,13 +669,15 @@
                     document.getElementById('employee-signature-input2').click();
                 });
             }
-
-            // Botão para criar um novo documento (em azul)
+            
+            // Botão para novo documento: recarrega a página (simulando F5)
             const novoDocBtn = document.getElementById('novoDocumentoButton');
             if (novoDocBtn) {
-                novoDocBtn.addEventListener('click', novoDocumento);
+                novoDocBtn.addEventListener('click', function() {
+                    window.location.reload();
+                });
             }
-
+            
             // Evento para processar o arquivo da assinatura (novo input)
             const empSigInput2 = document.getElementById('employee-signature-input2');
             if (empSigInput2) {
@@ -693,7 +701,7 @@
             }
         }
         
-        // Atualiza os campos de data para a data de hoje (sempre atualizando)
+        // Atualiza os campos de data para a data de hoje (permite edição posterior)
         function fillCurrentDates() {
             const now = new Date();
             const day = String(now.getDate()).padStart(2, '0');
@@ -811,7 +819,7 @@
             return formData;
         }
         
-        // Função para carregar dados do formulário a partir de um arquivo
+        // Função para carregar os dados do formulário a partir de um arquivo
         function loadFormData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -942,7 +950,6 @@
                 console.error("Elemento #aso-form não encontrado!");
                 return;
             }
-            
             // Cria um clone para manipulação sem afetar o layout original
             const clonedElement = element.cloneNode(true);
             clonedElement.style.fontSize = "8px";
@@ -981,42 +988,10 @@
                 document.body.removeChild(clonedElement);
             });
         }
-
-        // Função para criar um novo documento (zerar apenas os campos de preenchimento variável)
+        
+        // Função para criar um novo documento (simula F5 recarregando a página)
         function novoDocumento() {
-            // Lista dos IDs dos campos que devem ser limpos (excluindo cabeçalho, logo e dados estáticos do template)
-            const camposParaLimpar = [
-                'nome-funcionario',
-                'cpf-funcionario',
-                'rg-funcionario',
-                'data-nasc',
-                'idade-funcionario',
-                'empresa',
-                'setor',
-                'funcao',
-                'tempo-funcao',
-                'tempo-empresa',
-                'recomendacoes'
-            ];
-            camposParaLimpar.forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo) {
-                    campo.value = '';
-                }
-            });
-            // Limpa os botões de radio para os grupos que podem ser alterados
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.checked = false;
-            });
-            // Atualiza os campos de data para a data atual
-            fillCurrentDates();
-            // Remove a assinatura do funcionário
-            const empSigImg = document.getElementById('employee-signature-img');
-            if (empSigImg) {
-                empSigImg.src = '';
-                empSigImg.style.display = 'none';
-            }
-            // OBS: Os campos que fazem parte do template original (cabeçalho, exames complementares, etc.) permanecem inalterados.
+            window.location.reload();
         }
     </script>
 </body>
