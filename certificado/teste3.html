@@ -850,48 +850,70 @@ function savePDF() {
     // Cria um clone do elemento para manipulação
     const clonedElement = element.cloneNode(true);
     
-    // Aplica estilos de impressão temporários
+    // Função para reduzir recursivamente
+    function reduceElementSize(el, reductionFactor = 0.9) {
+        // Modifica estilos de fontes
+        const styles = [
+            'h1', 'h2', 'h3', 
+            '.form-label', 
+            '.form-field', 
+            'input', 
+            'textarea', 
+            'table', 
+            'td', 
+            'p', 
+            'span'
+        ];
+
+        styles.forEach(selector => {
+            const elements = el.querySelectorAll(selector);
+            elements.forEach(element => {
+                const currentSize = window.getComputedStyle(element).fontSize;
+                const numericSize = parseFloat(currentSize);
+                element.style.fontSize = `${numericSize * reductionFactor}px`;
+            });
+        });
+
+        // Reduz margens e paddings
+        el.style.padding = '3mm';
+        
+        const infoBoxes = el.querySelectorAll('.info-box, .section-box');
+        infoBoxes.forEach(box => {
+            box.style.marginBottom = '10px';
+            box.style.padding = '5px';
+        });
+
+        // Ajusta altura de elementos específicos
+        const signatureAreas = el.querySelectorAll('.signature-area');
+        signatureAreas.forEach(area => {
+            area.style.height = '25px';
+        });
+
+        // Reduz altura de tabelas
+        const tables = el.querySelectorAll('table');
+        tables.forEach(table => {
+            table.style.fontSize = '7pt';
+            const cells = table.querySelectorAll('td');
+            cells.forEach(cell => {
+                cell.style.padding = '2px';
+            });
+        });
+    }
+
+    // Aplica redução de tamanho
+    reduceElementSize(clonedElement);
+
+    // Garante dimensões A4
     clonedElement.style.cssText = `
         width: 210mm !important;
         max-width: 210mm !important;
         min-width: 210mm !important;
-        height: 297mm !important;
-        max-height: 297mm !important;
         margin: 0 !important;
         padding: 5mm !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
         position: relative !important;
     `;
-
-    // Reduz tamanho de fontes para garantir que tudo caiba
-    const styleReductionRules = `
-        <style>
-            body * {
-                font-size: 8pt !important;
-                line-height: 1.1 !important;
-            }
-            .container {
-                font-size: 8pt !important;
-            }
-            h1 { font-size: 10pt !important; }
-            h2 { font-size: 9pt !important; }
-            h3 { font-size: 8pt !important; }
-            input, textarea {
-                padding: 1px !important;
-                margin: 0 !important;
-            }
-            .info-box, .section-box {
-                margin-bottom: 5px !important;
-                padding: 3px !important;
-            }
-        </style>
-    `;
-
-    // Insere as regras de estilo no clone
-    const styleTag = document.createElement('div');
-    styleTag.innerHTML = styleReductionRules;
-    clonedElement.prepend(styleTag.firstChild);
 
     // Adiciona o clone ao corpo (necessário para html2canvas)
     document.body.appendChild(clonedElement);
