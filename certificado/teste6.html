@@ -840,38 +840,54 @@
         }
 
         // Função para salvar o conteúdo do formulário em PDF em 1 página
-        function savePDF() {
-            const element = document.getElementById('aso-form');
-            if (!element) {
-                console.error("Elemento #aso-form não encontrado!");
-                return;
-            }
-            
-            // Salva o estilo original para restaurar depois
-            const originalStyle = element.style.cssText;
-            
-            // Força uma redução temporária da fonte para tentar caber em 1 página
-            element.style.fontSize = "8px"; // experimente ajustar esse valor
-            
-            const opt = {
-                margin: 0,
-                filename: 'aso.pdf',
-                image: { type: 'jpeg', quality: 1.0 },
-                // Ajuste o scale para aumentar a resolução (2 é um bom início)
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' },
-                // Removemos qualquer quebra de página
-                pagebreak: { mode: [] }
-            };
-            
-            html2pdf().set(opt).from(element).save().then(function() {
-                // Restaura o estilo original
-                element.style.cssText = originalStyle;
-            }).catch(function(err) {
-                element.style.cssText = originalStyle;
-                console.error(err);
-            });
+// Função para salvar o conteúdo do formulário em PDF em 1 página
+function savePDF() {
+    const element = document.getElementById('aso-form');
+    if (!element) {
+        console.error("Elemento #aso-form não encontrado!");
+        return;
+    }
+    
+    const opt = {
+        margin: 0,
+        filename: 'aso.pdf',
+        image: { 
+            type: 'png',  // Mudança de jpeg para png para melhor qualidade
+            quality: 1.0  // Mantém qualidade máxima
+        },
+        html2canvas: { 
+            scale: 3,     // Aumenta a escala para melhor resolução
+            useCORS: true, // Permite carregar imagens de diferentes origens
+            logging: false // Desativa o log para performance
+        },
+        jsPDF: { 
+            unit: 'mm',   // Mudança para milímetros 
+            format: 'a4', 
+            orientation: 'portrait' 
+        },
+        pagebreak: { 
+            mode: ['css', 'legacy'],  // Tenta forçar página única
+            avoid: ['#aso-form']      // Evita quebrar o elemento principal
         }
+    };
+    
+    // Ajustes para garantir uma página única
+    const originalOverflow = element.style.overflow;
+    element.style.overflow = 'visible';
+    
+    html2pdf()
+        .set(opt)
+        .from(element)
+        .save()
+        .then(() => {
+            // Restaura o estilo original
+            element.style.overflow = originalOverflow;
+        })
+        .catch(function(err) {
+            console.error('Erro ao gerar PDF:', err);
+            element.style.overflow = originalOverflow;
+        });
+}
     </script>
 </body>
 </html>
