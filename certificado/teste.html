@@ -849,43 +849,57 @@ function savePDF() {
     }
     
     const opt = {
-        margin: 0,
+        margin: [5, 5, 5, 5],  // Margens reduzidas (topo, direita, baixo, esquerda)
         filename: 'aso.pdf',
         image: { 
-            type: 'png',  // Mudança de jpeg para png para melhor qualidade
-            quality: 1.0  // Mantém qualidade máxima
+            type: 'png',  
+            quality: 1.0  
         },
         html2canvas: { 
-            scale: 3,     // Aumenta a escala para melhor resolução
-            useCORS: true, // Permite carregar imagens de diferentes origens
-            logging: false // Desativa o log para performance
+            scale: 3,     
+            useCORS: true, 
+            logging: false,
+            scrollX: 0,
+            scrollY: -window.scrollY // Garantir que capture do topo
         },
         jsPDF: { 
-            unit: 'mm',   // Mudança para milímetros 
+            unit: 'mm',   
             format: 'a4', 
             orientation: 'portrait' 
         },
         pagebreak: { 
-            mode: ['css', 'legacy'],  // Tenta forçar página única
-            avoid: ['#aso-form']      // Evita quebrar o elemento principal
+            mode: 'avoid-all'  // Modo mais agressivo para evitar quebras
         }
     };
     
     // Ajustes para garantir uma página única
-    const originalOverflow = element.style.overflow;
-    element.style.overflow = 'visible';
+    const originalStyles = {
+        overflow: element.style.overflow,
+        height: element.style.height,
+        maxHeight: element.style.maxHeight
+    };
+
+    // Forçar dimensões para caber em uma página
+    element.style.overflow = 'hidden';
+    element.style.height = 'auto';
+    element.style.maxHeight = '297mm';  // Altura exata de uma página A4
     
     html2pdf()
         .set(opt)
         .from(element)
         .save()
         .then(() => {
-            // Restaura o estilo original
-            element.style.overflow = originalOverflow;
+            // Restaura os estilos originais
+            element.style.overflow = originalStyles.overflow;
+            element.style.height = originalStyles.height;
+            element.style.maxHeight = originalStyles.maxHeight;
         })
         .catch(function(err) {
             console.error('Erro ao gerar PDF:', err);
-            element.style.overflow = originalOverflow;
+            // Restaura os estilos originais em caso de erro
+            element.style.overflow = originalStyles.overflow;
+            element.style.height = originalStyles.height;
+            element.style.maxHeight = originalStyles.maxHeight;
         });
 }
     </script>
