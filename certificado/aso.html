@@ -438,13 +438,13 @@
             <table class="exams-table">
                 <tr>
                     <td style="width: 20%; border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="width: 30%; border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Espirometria">
                     </td>
                     <td style="width: 20%; border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="width: 30%; border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Acuidade Visual">
@@ -452,13 +452,13 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Eletrocardiograma">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Audiometria Ocupacional">
@@ -466,13 +466,13 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Avaliação Psicossocial">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Eletroencefalograma">
@@ -480,13 +480,13 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Raio X do Tórax (PA)">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Glicemia Jejum">
@@ -494,13 +494,13 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Hemograma completo">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
-                        <input type="text" style="width: 95%; border: none;" value="14/03/2025">
+                        <input type="text" style="width: 95%; border: none;" value="DD/MM/AAAA">
                     </td>
                     <td style="border: 1px solid black; padding: 2px;">
                         <input type="text" style="width: 95%; border: none;" value="Avaliação Clínica Ocupacional">
@@ -699,21 +699,30 @@
         }
         
         // Atualiza os campos de data para a data de hoje (permite edição posterior)
-        function fillCurrentDates() {
-            const now = new Date();
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            const currentDate = day + '/' + month + '/' + year;
-            
-            const dateFields = ['data-exame', 'data-recebimento', 'data-atual'];
-            dateFields.forEach(function(fieldId) {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.value = currentDate;
-                }
-            });
+// Função atualizada para preencher todos os campos de data com a data atual
+function fillCurrentDates() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const currentDate = day + '/' + month + '/' + year;
+    
+    // Campos específicos de data
+    const dateFields = ['data-exame', 'data-recebimento', 'data-atual'];
+    dateFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.value = currentDate;
         }
+    });
+    
+    // Preencher todas as células de data nos exames complementares
+    // Seleciona os inputs dentro da primeira e terceira coluna (colunas de data) de cada linha da tabela de exames
+    const examDateInputs = document.querySelectorAll('.exams-table td:nth-child(1) input, .exams-table td:nth-child(3) input');
+    examDateInputs.forEach(function(input) {
+        input.value = currentDate;
+    });
+}
         
         // Função para salvar os dados do formulário em JSON
         function saveFormData() {
