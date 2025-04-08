@@ -942,51 +942,112 @@
             }
         }
 
-        // Função para salvar o conteúdo do formulário em PDF em 1 página
-        function savePDF() {
-            const element = document.getElementById('aso-form');
-            if (!element) {
-                console.error("Elemento #aso-form não encontrado!");
-                return;
-            }
-            // Cria um clone para manipulação sem afetar o layout original
-            const clonedElement = element.cloneNode(true);
-            clonedElement.style.fontSize = "8px";
-            clonedElement.style.padding = "5mm";
-            clonedElement.style.boxSizing = "border-box";
-            clonedElement.style.overflow = "hidden";
-            clonedElement.style.width = "210mm";
-            clonedElement.style.maxWidth = "210mm";
+// Função melhorada para salvar o conteúdo em PDF com uma única página A4
+function savePDF() {
+    // Seleciona o formulário
+    const element = document.getElementById('aso-form');
+    if (!element) {
+        console.error("Elemento #aso-form não encontrado!");
+        return;
+    }
+    
+    // Configura para aplicar os estilos de impressão
+    const opt = {
+        margin: [5, 5, 5, 5], // pequenas margens em mm [topo, direita, baixo, esquerda]
+        filename: 'aso.pdf',
+        image: { type: 'jpeg', quality: 0.98 }, // JPEG para melhor compressão
+        html2canvas: { 
+            scale: 2, // escala moderada, equilibrando qualidade e performance
+            useCORS: true,
+            logging: false,
+            // Remova as propriedades de largura/altura para permitir o cálculo automático
+        },
+        jsPDF: { 
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait',
+            compress: true
+        },
+        // Esta configuração força tudo em uma única página
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
 
-            // Adiciona o clone ao corpo (fora da visualização)
-            document.body.appendChild(clonedElement);
-
-            const opt = {
-                margin: 0,
-                filename: 'aso.pdf',
-                image: { type: 'png', quality: 1.0 },
-                html2canvas: { 
-                    scale: 3,
-                    useCORS: true,
-                    logging: false,
-                    width: 793,  // Largura A4 em pixels
-                    height: 1120 // Altura A4 em pixels
-                },
-                jsPDF: { 
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                },
-                pagebreak: { mode: 'avoid-all' }
-            };
-
-            html2pdf().set(opt).from(clonedElement).save().then(function() {
-                document.body.removeChild(clonedElement);
-            }).catch(function(err) {
-                console.error('Erro ao gerar PDF:', err);
-                document.body.removeChild(clonedElement);
-            });
+    // Use esta abordagem para aplicar os estilos de impressão
+    const originalDisplayStyle = element.style.display;
+    element.style.display = 'block';
+    
+    // Adiciona estilos temporários via classe
+    const tempClass = 'preparing-pdf-print';
+    element.classList.add(tempClass);
+    
+    // Cria um estilo temporário para simular ambiente de impressão
+    const tempStyle = document.createElement('style');
+    tempStyle.textContent = `
+        .${tempClass} {
+            width: 210mm !important;
+            max-width: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
+            font-size: 9pt !important;
         }
+        .${tempClass} .info-box, 
+        .${tempClass} .section-box {
+            padding: 3px !important;
+            margin-bottom: 5px !important;
+            page-break-inside: avoid !important;
+        }
+        .${tempClass} .title-container h1 {
+            font-size: 11pt !important;
+        }
+        .${tempClass} .title-container h2 {
+            font-size: 10pt !important;
+            margin: 1px 0 !important;
+        }
+        .${tempClass} textarea {
+            height: 20px !important;
+        }
+        .${tempClass} .form-group {
+            margin-bottom: 2px !important;
+        }
+    `;
+    document.head.appendChild(tempStyle);
+    
+    // Garante que os elementos não-imprimíveis estão escondidos
+    const noPrintElements = document.querySelectorAll('.no-print');
+    const noPrintStates = Array.from(noPrintElements).map(el => el.style.display);
+    noPrintElements.forEach(el => el.style.display = 'none');
+
+    // Gera o PDF
+    html2pdf()
+        .set(opt)
+        .from(element)
+        .save()
+        .then(() => {
+            // Restaura o elemento ao estado original
+            element.style.display = originalDisplayStyle;
+            element.classList.remove(tempClass);
+            document.head.removeChild(tempStyle);
+            
+            // Restaura a visibilidade dos elementos não-imprimíveis
+            noPrintElements.forEach((el, index) => {
+                el.style.display = noPrintStates[index];
+            });
+        })
+        .catch(err => {
+            console.error('Erro ao gerar PDF:', err);
+            // Restaura o elemento mesmo em caso de erro
+            element.style.display = originalDisplayStyle;
+            element.classList.remove(tempClass);
+            document.head.removeChild(tempStyle);
+            
+            // Restaura a visibilidade dos elementos não-imprimíveis
+            noPrintElements.forEach((el, index) => {
+                el.style.display = noPrintStates[index];
+            });
+        });
+}
         
         // Função para criar um novo documento (simula F5 recarregando a página)
         function novoDocumento() {
