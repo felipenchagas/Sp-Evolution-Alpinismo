@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Modelo ASO Editável</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,8 +21,8 @@
             margin-bottom: 8px;
         }
         .logo-container {
-            width: 90px;
-            height: 70px;
+            width: 190px;
+            height: 90px;
             margin-right: 8px;
             position: relative;
             overflow: hidden;
@@ -52,8 +51,7 @@
             font-weight: bold;
         }
         .qr-space {
-            width: 100px;
-            height: 100px;
+ 
             border: 1px dashed #999;
             display: flex;
             justify-content: center;
@@ -151,6 +149,16 @@
             border-top: 1px solid #000;
             padding-top: 3px;
             font-size: 9pt;
+        }
+        
+        @media print {
+            .signature-placeholder {
+                display: none !important;
+            }
+            .signature-area {
+                border: none !important;
+                height: 30px !important;
+            }
         }
         .footer {
             text-align: center;
@@ -286,25 +294,23 @@
     <div class="container" id="aso-form">
         <div class="header">
             <div class="logo-container" id="logo-container">
-                <input type="file" id="logo-input" class="file-input" accept="image/*">
-                <img id="clinic-logo" class="logo-img" alt="Logo da Clínica">
-                <span id="logo-placeholder">Clique para adicionar logo</span>
+                <img src="logo.png" id="clinic-logo" class="logo-img" alt="Logo da Clínica" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
             <div class="title-container">
                 <h1 id="titulo-principal" contenteditable="true">DEPARTAMENTO DE MEDICINA DO TRABALHO</h1>
                 <h2 id="titulo-secundario" contenteditable="true">ATESTADO DE SAÚDE OCUPACIONAL (ASO)</h2>
-                <p id="endereco-clinica" contenteditable="true">Nome da Clínica - Endereço completo - CEP - Cidade/Estado</p>
-                <p id="contato-clinica" contenteditable="true">Telefone: (XX) XXXX-XXXX - (XX) XXXX-XXXX - www.suaclinica.com.br</p>
+                <p id="endereco-clinica" contenteditable="true">LICO MEDICINA E SEGURANCA DO TRABALHO LTDA - Avenida Brigadeiro Luís Antonio, 402 - Sala 41 - Bela Vista - 01318-000 - São Paulo - SP</p>
+                <p id="contato-clinica" contenteditable="true">Tel: (11) 91964-9772 - www.licomedicinadotrabalho.com</p>
             </div>
             <div class="qr-space">
-                Espaço para QR Code
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://www.gov.br"  alt="QR Code" style="display: block;">
             </div>
         </div>
 
         <div class="section-box">
             <div class="form-group">
                 <span class="form-label">TIPO DE EXAME:</span>
-                <input id="tipo-exame" type="text" class="form-field" value="Admissional">
+                <input id="tipo-exame" type="text" class="form-field" value="Admissional" style="font-weight: bold;">
             </div>
         </div>
 
@@ -398,27 +404,64 @@
 
         <div class="info-box">
             <h3>EXPOSTO AO RISCO:</h3>
-            <textarea id="riscos" rows="2" placeholder="Descreva os riscos aqui"></textarea>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+                <tr>
+                    <td style="border: 1px solid black; width: 20%; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="Químico" placeholder="Tipo de risco">
+                    </td>
+                    <td style="border: 1px solid black; width: 80%; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="hidrocarbonetos aromáticos, Poeira, Sílica livre" placeholder="Descrição do risco">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="Físico" placeholder="Tipo de risco">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="Ruído" placeholder="Descrição do risco">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="Acidente" placeholder="Tipo de risco">
+                    </td>
+                    <td style="border: 1px solid black; padding: 2px;">
+                        <input type="text" style="width: 100%; border: none;" value="Trabalho em altura" placeholder="Descrição do risco">
+                    </td>
+                </tr>
+            </table>
 
             <h3>EXAMES COMPLEMENTARES</h3>
             <table class="exams-table">
                 <tr>
-                    <td style="width: 20%;"><input id="exame-data-1" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td style="width: 30%;"><input id="exame-nome-1" type="text" placeholder="Exame" style="width: 95%;"></td>
-                    <td style="width: 20%;"><input id="exame-data-2" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td style="width: 30%;"><input id="exame-nome-2" type="text" placeholder="Exame" style="width: 95%;"></td>
+                    <td style="width: 20%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="width: 30%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Espirometria"></td>
+                    <td style="width: 20%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="width: 30%; border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Acuidade Visual"></td>
                 </tr>
                 <tr>
-                    <td><input id="exame-data-3" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td><input id="exame-nome-3" type="text" placeholder="Exame" style="width: 95%;"></td>
-                    <td><input id="exame-data-4" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td><input id="exame-nome-4" type="text" placeholder="Exame" style="width: 95%;"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Eletrocardiograma"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Audiometria Ocupacional"></td>
                 </tr>
                 <tr>
-                    <td><input id="exame-data-5" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td><input id="exame-nome-5" type="text" placeholder="Exame" style="width: 95%;"></td>
-                    <td><input id="exame-data-6" type="text" placeholder="Data" style="width: 95%;"></td>
-                    <td><input id="exame-nome-6" type="text" placeholder="Exame" style="width: 95%;"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Avaliação Psicossocial"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Eletroencefalograma"></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Raio X do Tórax (PA)"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Glicemia Jejum"></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Hemograma completo"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="14/03/2025"></td>
+                    <td style="border: 1px solid black; padding: 2px;"><input type="text" style="width: 95%; border: none;" value="Avaliação Clínica Ocupacional"></td>
                 </tr>
             </table>
 
@@ -476,7 +519,7 @@
                         <div class="signature-area" id="employee-signature-area">
                             <input type="file" id="employee-signature-input" class="file-input" accept="image/*">
                             <img id="employee-signature-img" class="signature-img" alt="Assinatura do Funcionário">
-                            <span id="employee-signature-placeholder">Clique para adicionar assinatura</span>
+                            <span id="employee-signature-placeholder" class="signature-placeholder">Clique para adicionar assinatura</span>
                         </div>
                         <div class="signature-line-bottom">
                             <div id="nome-funcionario-assinatura" contenteditable="true">FUNCIONÁRIO</div>
@@ -485,10 +528,8 @@
                 </div>
                 <div class="signature-line">
                     <div class="signature-field">
-                        <div class="signature-area" id="doctor-signature-area">
-                            <input type="file" id="doctor-signature-input" class="file-input" accept="image/*">
-                            <img id="doctor-signature-img" class="signature-img" alt="Assinatura do Médico">
-                            <span id="doctor-signature-placeholder">Clique para adicionar assinatura</span>
+                        <div class="signature-area" id="doctor-signature-area" style="border: none;">
+                            <img src="assinatura.png" style="max-width: 100%; max-height: 160px; display: block;" alt="Assinatura do Médico">
                         </div>
                         <div class="signature-line-bottom">
                             <div id="nome-medico" contenteditable="true">Médico Examinador: Flávio Antônio Marcelo Narazaki</div>
@@ -507,57 +548,32 @@
     </div>
 
     <script>
-        // Inicialização - configurar manipuladores de eventos e preencher datas
         document.addEventListener('DOMContentLoaded', function() {
-            // Configurar manipuladores de upload de imagens
-            document.getElementById('logo-container').addEventListener('click', function() {
-                document.getElementById('logo-input').click();
-            });
-            
-            document.getElementById('logo-input').addEventListener('change', function(event) {
-                loadImage(event, 'clinic-logo', 'logo-placeholder');
-            });
-            
+            // Configurar manipulador de upload para assinatura do funcionário
             document.getElementById('employee-signature-area').addEventListener('click', function() {
                 document.getElementById('employee-signature-input').click();
             });
             
             document.getElementById('employee-signature-input').addEventListener('change', function(event) {
-                loadImage(event, 'employee-signature-img', 'employee-signature-placeholder');
+                loadEmployeeSignature(event);
             });
-            
-            document.getElementById('doctor-signature-area').addEventListener('click', function() {
-                document.getElementById('doctor-signature-input').click();
-            });
-            
-            document.getElementById('doctor-signature-input').addEventListener('change', function(event) {
-                loadImage(event, 'doctor-signature-img', 'doctor-signature-placeholder');
-            });
-            
-            // Configurar botões de salvar e carregar
-            document.getElementById('saveButton').addEventListener('click', saveFormData);
-            document.getElementById('loadButton').addEventListener('click', function() {
-                document.getElementById('loadFile').click();
-            });
-            
-            document.getElementById('loadFile').addEventListener('change', loadFormData);
             
             // Preencher datas automaticamente
             fillCurrentDates();
         });
         
-        // Função para carregar imagens (logo e assinaturas)
-        function loadImage(event, imgId, placeholderId) {
+        // Função para carregar a assinatura do funcionário
+        function loadEmployeeSignature(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.getElementById(imgId);
-                    if (img) {
-                        img.src = e.target.result;
-                        img.style.display = 'block';
+                    const signatureImg = document.getElementById('employee-signature-img');
+                    if (signatureImg) {
+                        signatureImg.src = e.target.result;
+                        signatureImg.style.display = 'block';
                         
-                        const placeholder = document.getElementById(placeholderId);
+                        const placeholder = document.getElementById('employee-signature-placeholder');
                         if (placeholder) {
                             placeholder.style.display = 'none';
                         }
