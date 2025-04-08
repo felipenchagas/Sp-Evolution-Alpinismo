@@ -883,19 +883,6 @@ function savePDF() {
             box.style.padding = '5px';
         });
 
-        // Trata a assinatura do funcionário
-        const employeeSignatureArea = el.querySelector('#employee-signature-area');
-        const employeeSignatureImg = el.querySelector('#employee-signature-img');
-        const employeeSignaturePlaceholder = el.querySelector('#employee-signature-placeholder');
-        
-        // Se não tiver imagem carregada, remove completamente a área de assinatura
-        if (!employeeSignatureImg || employeeSignatureImg.style.display === 'none') {
-            if (employeeSignatureArea) {
-                // Remove toda a área de assinatura do funcionário
-                employeeSignatureArea.closest('.signature-line').remove();
-            }
-        }
-
         // Ajusta altura de elementos específicos
         const signatureAreas = el.querySelectorAll('.signature-area');
         signatureAreas.forEach(area => {
@@ -911,16 +898,6 @@ function savePDF() {
                 cell.style.padding = '2px';
             });
         });
-
-        // Ajusta o layout das assinaturas após possível remoção
-        const signatureSection = el.querySelector('.signature-section');
-        if (signatureSection) {
-            signatureSection.style.justifyContent = 'center';
-            const remainingSignatureLine = signatureSection.querySelector('.signature-line');
-            if (remainingSignatureLine) {
-                remainingSignatureLine.style.width = '100%';
-            }
-        }
     }
 
     // Aplica redução de tamanho
