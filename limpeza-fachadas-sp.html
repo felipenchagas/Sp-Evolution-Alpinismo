@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
-<head><!-- Google Tag Manager --> <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PZQNWPSP');</script> <!-- End Google Tag Manager --><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
@@ -20,21 +20,65 @@
 <link rel="stylesheet" href="assets/css/main.css">
 <link rel="stylesheet" href="assets/css/responsive.css">
 <link rel="stylesheet" type="text/css" href="estilo/wts.css"><!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16467756865">
-</script>
+<!-- Google Ads – tag global + função de conversão -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16467756865"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  gtag('config','AW-16467756865');
 
-  gtag('config', 'AW-16467756865');
+  /* dispara a conversão e só então redireciona */
+  function gtag_report_conversion(url){
+    gtag('event','conversion',{
+      send_to      : 'AW-16467756865/KAEYCKTg7aMaEMGoUk9',
+      value        : 5.0,
+      currency     : 'BRL',
+      event_callback: function(){ if(url) window.location = url; }
+    });
+    return false;          /* impede a navegação antes do hit sair */
+  }
 </script>
+
 </head>
-<body><a class="corzinha" href="https://wa.me/5511911984511"><div id="whatswidget-pre-wrapper" ><div id="whatswidget-widget-wrapper" class="whatswidget-widget-wrapper" style="all:revert;"><div id="whatswidget-conversation-message-outer" class="whatswidget-conversation-message-outer" style="all:revert;"> <span id="whatswidget-text-header-outer" class="whatswidget-text-header-outer" style="all:revert;">Empresa</span><br><div id="whatswidget-text-message-outer" class="whatswidget-text-message-outer" style="all:revert;">Bem vindo, a Evolution Alpinismo</div></div><div class="whatswidget-button-wrapper" style="all:revert;"><div class="whatswidget-button" id="whatswidget-button" style="all:revert;"><img src="wts.svg"></div></div></div></div></a>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZQNWPSP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<body><!-- BOTÃO WHATSAPP COM CONVERSÃO DO GOOGLE ADS -->
+<a class="corzinha"
+   href="https://wa.me/5511911984511"
+   onclick="return gtag_report_conversion(this.href);">
+
+  <div id="whatswidget-pre-wrapper">
+    <div id="whatswidget-widget-wrapper" class="whatswidget-widget-wrapper" style="all:revert;">
+      
+      <!-- Mensagem/bolha que aparece sobre o botão -->
+      <div id="whatswidget-conversation-message-outer"
+           class="whatswidget-conversation-message-outer"
+           style="all:revert;">
+        <span id="whatswidget-text-header-outer"
+              class="whatswidget-text-header-outer"
+              style="all:revert;">Empresa</span><br>
+        <div id="whatswidget-text-message-outer"
+             class="whatswidget-text-message-outer"
+             style="all:revert;">
+          Bem-vindo, a Evolution Alpinismo
+        </div>
+      </div>
+
+      <!-- Ícone do WhatsApp -->
+      <div class="whatswidget-button-wrapper" style="all:revert;">
+        <div class="whatswidget-button" id="whatswidget-button" style="all:revert;">
+          <img src="wts.svg" alt="WhatsApp">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</a>
+<!-- FIM DO BOTÃO -->
+
+
+
+
 
 
 <header class="main-header">
@@ -46,9 +90,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <div class="top-right">
 <ul class="top-header-nav">
-<li><a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511">Orçamento</a></li>
-<li><a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511">Orçamento</a></li>
-<a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511">Whatsapp</a>
+<li>
+  <a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511"
+     onclick="return gtag_report_conversion(this.href);">
+     Orçamento
+  </a>
+</li>
+
+<li>
+  <a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511"
+     onclick="return gtag_report_conversion(this.href);">
+     Orçamento
+  </a>
+</li>
+
+<a href="https://api.whatsapp.com/send?1=pt_BR&phone=5511911984511"
+   onclick="return gtag_report_conversion(this.href);">
+   Whatsapp
+</a>
+
 </ul>
 <ul class="header-social-share">
 <li><a href="https://www.facebook.com/evolutionalpinismo"><i class="fab fa-facebook-f"></i></a></li>
@@ -416,6 +476,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="assets/js/vendor/smooth-scroll.js"></script>
 <script src="assets/js/vendor/wow.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+  /* Aplica o disparo de conversão a TODOS os links .whats-conv */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('a.whats-conv').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        /* se quiser garantir o delay, evita a navegação imediata */
+        e.preventDefault();
+        gtag_report_conversion(this.href);
+      });
+    });
+  });
+</script>
 </body>
 
 

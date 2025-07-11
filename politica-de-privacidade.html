@@ -31,15 +31,26 @@
         }
     </style>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16467756865">
-</script>
+<!-- Google Ads – tag global + função de conversão -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16467756865"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  gtag('config','AW-16467756865');
 
-  gtag('config', 'AW-16467756865');
+  /* dispara a conversão e só então redireciona */
+  function gtag_report_conversion(url){
+    gtag('event','conversion',{
+      send_to      : 'AW-16467756865/KAEYCKTg7aMaEMGoUk9',
+      value        : 5.0,
+      currency     : 'BRL',
+      event_callback: function(){ if(url) window.location = url; }
+    });
+    return false;          /* impede a navegação antes do hit sair */
+  }
 </script>
+
 </head>
 <body>
     <div class="container">
@@ -97,5 +108,17 @@
         <strong>Telefone:</strong> <a href="tel:+5511911984511">(11) 91198-4511</a><br>
         <strong>E-mail:</strong> <a href="mailto:contato@evolutionalpinismo.com.br">contato@evolutionalpinismo.com.br</a></p>
     </div>
+<script>
+  /* Aplica o disparo de conversão a TODOS os links .whats-conv */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('a.whats-conv').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        /* se quiser garantir o delay, evita a navegação imediata */
+        e.preventDefault();
+        gtag_report_conversion(this.href);
+      });
+    });
+  });
+</script>
 </body>
 </html>
