@@ -322,7 +322,7 @@
       </div>
       <div class="col-md-6">
         <div class="contact-form">
-<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" class="form-horizontal" onsubmit="this.style.display='none'; document.getElementById('form-loader-overlay').style.display='flex';">
+<form id="orcamentoForm" action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" class="form-horizontal">
   <div style="margin-bottom: 25px; text-align: center;">
     <h2 style="font-family: Arial, sans-serif; color: #111; font-size: 26px; margin-bottom: 10px;">Solicite um Orçamento</h2>
     <span style="display: block; height: 2px; width: 60px; background: #007bff; margin: 0 auto;"></span>
@@ -344,13 +344,20 @@
   <p style="margin-top:20px; font-size:18px; color:#333;">Enviando seu pedido...</p>
 </div>
 
-<!-- Animação do Loader -->
+<!-- Loader CSS -->
 <style>
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 </style>
+
+<!-- JavaScript para mostrar o loader sem quebrar o envio -->
+<script>
+document.getElementById('orcamentoForm').addEventListener('submit', function () {
+  document.getElementById('form-loader-overlay').style.display = 'flex';
+});
+</script>
 
 
 
