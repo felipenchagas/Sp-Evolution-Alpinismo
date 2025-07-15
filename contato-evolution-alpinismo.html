@@ -322,65 +322,24 @@
       </div>
       <div class="col-md-6">
         <div class="contact-form">
-<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post">
-
+<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" class="form-horizontal">
   <div class="contact-title">
     <h2>Solicite um Orçamento<span></span></h2>
   </div>
   <div class="contact-form-group">
-    <!-- Campo Nome -->
-    <div class="form-field">
-      <input type="text" id="nome" name="nome" class="form-control" placeholder="Seu nome completo" required>
-    </div>
-    <!-- Campo Email -->
-    <div class="form-field">
-      <input type="email" id="email" name="email" class="form-control" placeholder="Seu melhor email" required>
-    </div>
-    <!-- Campo Telefone -->
-    <div class="form-field">
-      <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="Seu telefone (com DDD)" required>
-    </div>
-    <!-- Campo Cidade -->
-    <div class="form-field">
-      <input type="text" id="cidade" name="cidade" class="form-control" placeholder="Sua cidade" required>
-    </div>
-    <!-- Campo Detalhes do Orçamento -->
+    <div class="form-field"><input type="text" name="nome" placeholder="Seu nome completo" required></div>
+    <div class="form-field"><input type="email" name="email" placeholder="Seu melhor email" required></div>
+    <div class="form-field"><input type="tel" name="telefone" placeholder="Seu telefone (com DDD)" required></div>
+    <div class="form-field"><input type="text" name="cidade" placeholder="Sua cidade" required></div>
     <div class="form-field message">
-      <textarea id="descricao" name="descricao" cols="30" rows="5" class="form-control" placeholder="Descreva os detalhes do serviço que você precisa..." required></textarea>
+      <textarea name="descricao" rows="5" placeholder="Descreva o serviço que você precisa..." required></textarea>
     </div>
-    <!-- Botão de Envio -->
     <div class="form-field">
-      <button id="submit" class="default-btn" type="submit">Enviar Pedido de Orçamento</button>
+      <button type="submit">Enviar Pedido de Orçamento</button>
     </div>
   </div>
-  <!-- Mensagens de status do formulário -->
-  <div id="form-messages" class="alert" role="alert"></div>
-<div id="form-loader-overlay" style="
-  display: none;
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.8);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  font-family: sans-serif;
-">
-  <div style="
-    width: 50px;
-    height: 50px;
-    border: 5px solid #eee;
-    border-top: 5px solid #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  "></div>
-  <p style="font-size: 16px; color: #333;">Enviando seu pedido...</p>
-</div>
-
-
 </form>
+
 
         </div>
       </div>
