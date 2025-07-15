@@ -485,10 +485,18 @@
   });
 </script>
 <script>
-document.querySelector('form').addEventListener('submit', function() {
-  document.getElementById('form-loader').style.display = 'block';
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form');
+  const loader = document.getElementById('form-loader');
+  
+  if (form) {
+    form.addEventListener('submit', function () {
+      loader.style.display = 'block';
+    });
+  }
 });
 </script>
+
 
 </body>
 
