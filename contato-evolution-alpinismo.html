@@ -323,46 +323,45 @@
       <div class="col-md-6">
         <div class="contact-form">
 <style>
-/* Loader overlay escondido por padrão */
-#form-loader-overlay {
+/* Overlay invisível até ser chamado */
+#carregando:target {
+  display: flex;
+}
+
+#carregando {
+  display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   z-index: 9999;
-  display: none;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: Arial, sans-serif;
+  font-family: sans-serif;
 }
 
-/* Quando o botão é clicado e o form é válido */
-form:valid + #form-loader-overlay {
-  display: flex;
-  animation: none;
-}
-
-/* Animação de barra de carregamento até 100% */
+/* Loader visual */
 .loader-bar {
   width: 300px;
   height: 20px;
-  background: #e0e0e0;
+  background: #ddd;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 20px;
-  box-shadow: inset 0 0 5px #ccc;
+  box-shadow: inset 0 0 4px #aaa;
 }
 .loader-bar::before {
   content: '';
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #007bff, #00bcd4);
-  animation: loadbar 3s linear forwards;
+  background: linear-gradient(90deg, #007bff, #00c4cc);
+  animation: carregar 2s linear forwards;
 }
-@keyframes loadbar {
-  0%   { width: 0%; }
-  100% { width: 100%; }
+@keyframes carregar {
+  from { width: 0%; }
+  to   { width: 100%; }
 }
+
 .loader-text {
   font-size: 18px;
   color: #333;
@@ -370,17 +369,20 @@ form:valid + #form-loader-overlay {
 </style>
 
 <!-- FORMULÁRIO -->
-<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" class="form-horizontal" style="max-width: 500px; margin: auto; display: flex; flex-direction: column; gap: 15px;">
-  <input type="text" name="nome" placeholder="Seu nome completo" required style="padding: 12px; font-size: 16px;">
-  <input type="email" name="email" placeholder="Seu melhor email" required style="padding: 12px; font-size: 16px;">
-  <input type="tel" name="telefone" placeholder="Seu telefone (com DDD)" required style="padding: 12px; font-size: 16px;">
-  <input type="text" name="cidade" placeholder="Sua cidade" required style="padding: 12px; font-size: 16px;">
-  <textarea name="descricao" rows="5" placeholder="Descreva o serviço que você precisa..." required style="padding: 12px; font-size: 16px;"></textarea>
-  <button type="submit" style="padding: 14px; background: #007bff; color: white; font-size: 16px; border: none; cursor: pointer;">Enviar Pedido de Orçamento</button>
+<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" style="max-width:500px; margin:auto; display:flex; flex-direction:column; gap:15px;">
+  <input type="text" name="nome" placeholder="Seu nome completo" required style="padding:12px; font-size:16px;">
+  <input type="email" name="email" placeholder="Seu melhor email" required style="padding:12px; font-size:16px;">
+  <input type="tel" name="telefone" placeholder="Seu telefone (com DDD)" required style="padding:12px; font-size:16px;">
+  <input type="text" name="cidade" placeholder="Sua cidade" required style="padding:12px; font-size:16px;">
+  <textarea name="descricao" placeholder="Descreva o serviço que você precisa..." rows="5" required style="padding:12px; font-size:16px;"></textarea>
+
+  <!-- Botão disfarçado para ativar loader -->
+  <a href="#carregando" onclick="this.nextElementSibling.click()" style="padding:14px; background:#007bff; color:white; font-size:16px; text-align:center; text-decoration:none; cursor:pointer;">Enviar Pedido de Orçamento</a>
+  <button type="submit" style="display:none"></button>
 </form>
 
-<!-- LOADER CSS -->
-<div id="form-loader-overlay">
+<!-- LOADER ANIMADO CSS PURO -->
+<div id="carregando">
   <div class="loader-bar"></div>
   <div class="loader-text">Enviando seu pedido...</div>
 </div>
