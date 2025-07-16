@@ -340,18 +340,6 @@
 
 </header>
 
-<div id="popup-search-box">
-<div class="box-inner-wrap d-flex align-items-center">
-<form id="form" action="/buscar" method="get" role="search">
-<input id="popup-search" type="text" name="s" placeholder="Type keywords here...">
-<button id="popup-search-button" type="submit" name="submit">
-<i class="las la-search"></i>
-</button>
-</form>
-<div class="search-close"><i class="las la-times"></i></div>
-</div>
-</div>
-
 <div id="searchbox-overlay"></div>
 <div id="popup-sidebox" class="popup-sidebox">
 <div class="sidebox-content">
@@ -689,50 +677,85 @@ Utilizamos técnicas avançadas de acesso por corda para realizar<br> serviços 
 
 <section class="booking-section">
     <div class="container">
-        <div class="row pos-relative padding">
+        <div class="row pos-relative padding">                    <div class="section-heading mb-30">
+                        <h4><span></span>Pré-atendimento online</h4>
+                        <h2 class="white">Solicite seu Orçamento de Alpinismo Industrial em São Paulo</h2>
+                    </div>
             <div class="col-lg-4">
                 <div class="booking-car wow fade-in-left" data-wow-delay="200ms"></div>
             </div>
             <div class="col-lg-8">
                 <div class="booking-wrap">
-                    <div class="section-heading mb-30">
-                        <h4><span></span>Pré-atendimento online</h4>
-                        <h2 class="white">Solicite seu Orçamento de Alpinismo Industrial em São Paulo</h2>
-                    </div>
-                    <form action="/contato" id="book-taxi-ride">
-                        <div class="booking-form">
-                            <div class="form-field">
-                                <i class="las la-user-tie"></i>
-                                <input type="text" id="full-name" name="full-name" class="form-control" placeholder="Seu nome" required>
-                            </div>
-                            <div class="form-field">
-                                <i class="las la-envelope-open"></i>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
-                            </div>
-                            <div class="form-field">
-                                <i class="las la-tags"></i>
-                                <select name="package-type" id="type" class="niceSelect">
-                                    <option value="limpeza-fachadas-sp">Limpeza de fachadas</option>
-                                    <option value="instalacao-adesivos">Instalação de adesivos</option>
-                                    <option value="limpeza-tanques">Limpeza de tanques</option>
-                                    <option value="manutencao-industrial-sp">Manutenção industrial</option>
-                                    <option value="inspecoes-reparos">Inspeções e reparos</option>
-                                </select>
-                            </div>
-                            <div class="form-field">
-                                <i class="las la-map-marker"></i>
-                                <input type="text" id="start-dest" name="start-dest" class="form-control" placeholder="Telefone" required>
-                            </div>
-                            <div class="form-field">
-                                <i class="las la-map-marker"></i>
-                                <input type="text" id="end-dest" name="end-dest" class="form-control" placeholder="Descrição do serviço" required>
-                            </div>
-                            <div class="form-field">
-                                <button id="submit" class="default-btn" type="submit">Enviar</button>
-                            </div>
-                        </div>
-                        <div id="form-messages" class="alert" role="alert"></div>
-                    </form>
+
+                     <div class="contact-form">
+<style>
+/* Overlay invisível até ser chamado */
+#carregando:target {
+  display: flex;
+}
+
+#carregando {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: sans-serif;
+}
+
+/* Loader visual */
+.loader-bar {
+  width: 300px;
+  height: 20px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 4px #aaa;
+}
+.loader-bar::before {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #00c4cc);
+  animation: carregar 2s linear forwards;
+}
+@keyframes carregar {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+.loader-text {
+  font-size: 18px;
+  color: #333;
+}
+</style>
+
+<!-- FORMULÁRIO -->
+<form action="https://empresarialweb.com.br/contato/evolutionalpinismo/enviar.php" method="post" style="max-width:500px; margin:auto; display:flex; flex-direction:column; gap:15px;">
+  <input type="text" name="nome" placeholder="Seu nome completo" required style="padding:12px; font-size:16px;">
+  <input type="email" name="email" placeholder="Seu melhor email" required style="padding:12px; font-size:16px;">
+  <input type="tel" name="telefone" placeholder="Seu telefone (com DDD)" required style="padding:12px; font-size:16px;">
+  <input type="text" name="cidade" placeholder="Sua cidade" required style="padding:12px; font-size:16px;">
+  <textarea name="descricao" placeholder="Descreva o serviço que você precisa..." rows="5" required style="padding:12px; font-size:16px;"></textarea>
+
+  <!-- Botão disfarçado para ativar loader -->
+  <a href="#carregando" onclick="this.nextElementSibling.click()" style="padding:14px; background:#007bff; color:white; font-size:16px; text-align:center; text-decoration:none; cursor:pointer;">Enviar Pedido de Orçamento</a>
+  <button type="submit" style="display:none"></button>
+</form>
+
+<!-- LOADER ANIMADO CSS PURO -->
+<div id="carregando">
+  <div class="loader-bar"></div>
+  <div class="loader-text">Enviando seu pedido...</div>
+</div>
+
+
+
+        </div>
                 </div>
             </div>
         </div>
